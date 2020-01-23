@@ -49,13 +49,9 @@ function processFirstItem(stringList, callback) {
  * should return "There are 0".
 */
 function processLength(items, num) {
-    if (items.length) {
-        return num(items.length);
-    }
-    else {
-        return 0;
-    }
+    return num(items.length);
 }
+
 
 /**
  * ### Challenge `processLastItem`
@@ -71,10 +67,9 @@ function processLength(items, num) {
  * Invoking `processLastItem` passing `['foo', 'bar']` and `(str) => str + str`,
  * should return 'barbar'.
 */
-function processLastItem(words, cb) {
-    const lastWord = words[words.length -1];
-    return cb(lastWord);
-   
+
+function processLastItem(arr, cb) {
+    return cb(arr[arr.length -1])
 }
 
 /**
@@ -94,17 +89,13 @@ function processLastItem(words, cb) {
  * [2] Invoking `processSum` passing `[]` and `(num) => num + 1000`,
  * should return 1000.
 */
+
 function processSum(numberList, callback) {
-    if (numberList.length) {
-        const sumNums = numberList.reduce((arr, curr) => {
-            return arr + curr;
-        });
+    const sumNums = numberList.reduce((arr, curr) => {
+        return arr + curr;
+    }, 0);
         return callback(sumNums);
     }
-    else {
-        return callback(0);
-    }
-}
 
 /**
  * ### Challenge `processProduct`
@@ -147,11 +138,11 @@ function processProduct(num1, num2, callback) {
  * [2] Invoking `processContains` passing
  * "lady gaga" and `['foo', 'bar']` and `(bool) => bool ? 'nice!' : 'sad'`,
  * should return "sad".
-*/
-function processContains(item, elements, callback) {
-    const result = elements.includes(item);
-    return callback(result);
+// */
+function processContains(item, array, cb) {
+    return cb(array.includes(item));
 }
+
 
 /**
  * ### Challenge `processDuplicateFree`
@@ -172,8 +163,8 @@ function processContains(item, elements, callback) {
  * [2] Invoking `processDuplicateFree` passing `[1,1,2,2,3]` and `(arr) => arr.length`,
  * should return 3.
 */
-function processDuplicateFree(numbers, callback) {
 
+function processDuplicateFree(numbers, callback) {
     const uniqueNumbers = new Set(numbers);
     return callback(Array.from(uniqueNumbers));
 }
@@ -221,11 +212,7 @@ function getFullNames(runners) {
  * The first names appear in the array in the same order the runners appear in the `runners` array.
 */
 function firstNamesAllCaps(runners) {
-    
-    let runnersNames = runners.map((runner, index, runners) => {
-        return runner.first_name.toUpperCase();
-    });
-    return runnersNames;
+    return runners.map(row => row.first_name.toUpperCase());
 }
 
 /**
@@ -242,8 +229,7 @@ function firstNamesAllCaps(runners) {
  * The runners in the array appear in the same order they appear in the `runners` array.
 */
 function getRunnersByTShirtSize(runners, tShirtSize) {
-    const shirtSize = runners.filter(shirt => shirt.shirt_size === tShirtSize);
-    return shirtSize;
+    return runners.filter(runner => runner.shirt_size === tShirtSize);
 }
 
 /**
@@ -258,21 +244,10 @@ function getRunnersByTShirtSize(runners, tShirtSize) {
 */
 function tallyUpDonations(runners) {
 
-    if (runners.length < 1) {
-        return 0;
-    }
-
-    else {
-        let donations = runners.map((eachRunner, i, runners) => {
-            return eachRunner.donation;
-        })
-        let tally = donations.reduce((acc, curr) => {
-            return acc + curr;
-        });
-        return tally;
-    }
-
+    return runners.reduce((total, donation) => total + donation.donation, 0);
 }
+
+
 
 /////////////// CLOSURES ///////////////
 /////////////// CLOSURES ///////////////
@@ -290,14 +265,15 @@ function tallyUpDonations(runners) {
  * counter() // should return 2
  * etc
 */
-function counterMaker() {
+function counterMaker() {   
     let count = 0;
-    return function counter() {
-        count ++;
-        return !count ? 0: count-1;
+
+    function counter() {
+        return count++
     }
+    return counter
 }
-  
+
 
 /**
  * ### Challenge `counterMakerWithLimit`
@@ -320,19 +296,17 @@ function counterMaker() {
  * etc
 */
 function counterMakerWithLimit(maxValue) {
-
     let count = 0;
 
-    return function counter() {
+    function counter() {
         if (count > maxValue) {
-            count = 0;
+            count = 0;   
         }
         count++
-        return count===0 ? 0: count-1;
+        return count === 0 ? 0: count-1;
     }
+    return counter;
 }
-
-    
 
 /////////////// END OF CHALLENGE ///////////////
 /////////////// END OF CHALLENGE ///////////////
